@@ -1,30 +1,48 @@
 package com.sm42.oscar.testapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
+
+    public static final String POSITION = "criminalPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
 
-        String name = getIntent().getStringExtra(CriminalListActivity.CRIMINAL_NAME);
-        TextView nameView = (TextView) findViewById(R.id.details_name);
-        nameView.setText(name);
+        //Some example code below on how to use CriminalProvider:
+        CriminalProvider criminalProvider = new CriminalProvider(getApplicationContext());
+        CriminalListAdapter adapter = new CriminalListAdapter(this, criminalProvider.GetCriminals());
 
-        Button button_report = (Button) findViewById(R.id.button_report);
-        button_report.setOnClickListener(new View.OnClickListener() {
+        ListView criminalList = (ListView) findViewById(R.id.criminal_listview);
+        criminalList.setAdapter(adapter);
+
+        criminalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra(POSITION, position);
+
+                MainActivity.this.startActivity(intent);
             }
         });
+
+        /*TextView header = (TextView) findViewById(R.id.textHeader);
+        header.setText(String.format("Criminals [%d]:",criminals.size()));
+
+        String boxText = "";
+        for(Criminal criminal : criminals) {
+            List<Crime> crimes = criminal.crimes;
+            boxText += criminal.name + " has " + crimes.size() + " crimes\n";
+        }
+
+        EditText textCriminal = (EditText) findViewById(R.id.textCriminals);
+        textCriminal.setText(boxText);*/
     }
 }

@@ -18,4 +18,5 @@
     <string name="button_call_113">Call 113</string>
     <string name="button_back">Back</string>
     <string name="button_send_report">Send Report</string>
+    <string name="list_title">Criminals</string>
 </resources>
